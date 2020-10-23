@@ -4,16 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
+    android:paddingTop="32dp"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/txtPermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="こんにちは、Bluetooth!"
-        android:textSize="32sp"
+        android:text="権限チェック中..."
+        android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtEnabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="有効化チェック中..."
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPermission" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

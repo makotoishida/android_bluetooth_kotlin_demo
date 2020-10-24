@@ -29,4 +29,59 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtPermission" />
 
+    <TextView
+        android:id="@+id/lblDevices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_devices"
+        android:textSize="24sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtEnabled"
+        />
+
+    <TextView
+        android:id="@+id/txtDeviceListMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/devices_message"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblDevices"
+        />
+
+    <ListView
+        android:id="@+id/lstDevices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDeviceListMessage"
+        />
+
+    <Button
+        android:id="@+id/btnOpenBlutoothSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth設定を開く"
+        android:layout_marginTop="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lstDevices"
+        />
+
+    <Button
+        android:id="@+id/btnOpenScanActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="デバイス検出画面を開く"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnOpenBlutoothSettings"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

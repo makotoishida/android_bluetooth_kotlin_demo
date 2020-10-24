@@ -5,4 +5,13 @@
     <string name="bt_not_enabled">Bluetoothを有効化してください。</string>
     <string name="bt_enabled">Bluetoothが有効になっています。</string>
     <string name="ble_not_supported">この端末ではBluetooth Low Energyがサポートされていません。</string>
+    <string name="lbl_devices">ペアリング済みのデバイス</string>
+    <string name="devices_message">タップするとデバイス詳細画面を開きます。</string>
+    <string name="devices_message_none">ペアリングされたデバイスがありません。</string>
+
+    <string name="device_detail_title">デバイス詳細情報</string>
+    <string name="btn_connect">接続</string>
+    <string name="btn_disconnect">切断</string>
+    <string name="btn_send">送信</string>
+    <string name="device_scan_title">デバイス検出</string>
 </resources>

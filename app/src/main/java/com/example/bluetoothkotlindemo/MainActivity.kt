@@ -7,19 +7,23 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
+const val DEVICE_NAME = "com.example.bluetoothkotlindemo.DEVICE_NAME"
+const val DEVICE_ADDRESS = "com.example.bluetoothkotlindemo.DEVICE_ADDRESS"
+
 class MainActivity : AppCompatActivity() {
+
 
     val REQUEST_ALLOW_PERMISSION = 1000
     val REQUEST_BT_ON = 1001
 
-    var mBluetoothAdapter: BluetoothAdapter? = null
-    var mTxtPermission: TextView? = null
-    var mTxtEnabled: TextView? = null
+    private lateinit var mBluetoothAdapter: BluetoothAdapter
+    private lateinit var mTxtPermission: TextView
+    private lateinit var mTxtEnabled: TextView
+    private lateinit var mLstDevices: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,27 +35,52 @@ class MainActivity : AppCompatActivity() {
         // 必要な権限が許可されているかチェック。
         val hasPermission = checkPermission();
         mTxtPermission = findViewById<TextView>(R.id.txtPermission)
-        mTxtPermission?.setText(if (hasPermission) R.string.has_permission else R.string.no_permission);
+        mTxtPermission.setText(if (hasPermission) R.string.has_permission else R.string.no_permission);
 
-
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
         val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         mBluetoothAdapter = bluetoothManager.adapter
 
         // Bluetoothが有効かチェック。
         val bluetoothEnabled = checkBluetoothEnabled()
         mTxtEnabled = findViewById<TextView>(R.id.txtEnabled)
-        mTxtEnabled?.setText(if (bluetoothEnabled) R.string.bt_enabled else R.string.bt_not_enabled);
+        mTxtEnabled.setText(if (bluetoothEnabled) R.string.bt_enabled else R.string.bt_not_enabled);
 
         // ペアリング済みデバイスの一覧を表示。
-        val devices = mBluetoothAdapter?.bondedDevices?.size
+        mLstDevices = findViewById(R.id.lstDevices)
+        val devices = mBluetoothAdapter.bondedDevices.toList()
+        val deviceNames: List<String> = devices.map { "${it.name} (${it.address})" }
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, deviceNames)
+        mLstDevices.adapter = adapter
 
-        // デバイスの検出開始ボタン
+        // ペアリング済みデバイス一覧の行がクリックされたときの処理。
+        mLstDevices.setOnItemClickListener({ parent, view, position, id ->
+            val device = devices.get(position)
+            if (device != null) {
+                // デバイス詳細情報画面を開く。
+                val intent = Intent(this, DeviceDetailActivity::class.java).apply {
+                    putExtra(DEVICE_NAME, device.name)
+                    putExtra(DEVICE_ADDRESS, device.address)
+                }
+                startActivity(intent)
+            }
+        })
 
-        // デバイスの検出停止ボタン
+        if (devices.size == 0) {
+            findViewById<TextView>(R.id.txtDeviceListMessage).setText(R.string.devices_message_none)
+        }
 
-        // 検出されたデバイスの一覧
+        // OSのBluetooth設定画面を開く。
+        val btnOpenBlutoothSettings = findViewById<Button>(R.id.btnOpenBlutoothSettings)
+        btnOpenBlutoothSettings.setOnClickListener {
+            startActivity(Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS))
+        }
+
+        // デバイス検出画面を開く。
+        val btnOpenScanActivity = findViewById<Button>(R.id.btnOpenScanActivity)
+        btnOpenScanActivity.setOnClickListener {
+            startActivity(Intent(this, DeviceScanActivity::class.java))
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -60,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("Debug", "requestCode=${requestCode}, resultCode=${resultCode}")
 
         if (REQUEST_BT_ON == requestCode) {
-            mTxtEnabled?.setText(if (resultCode == RESULT_OK) R.string.bt_enabled else R.string.bt_not_enabled)
+            mTxtEnabled.setText(if (resultCode == RESULT_OK) R.string.bt_enabled else R.string.bt_not_enabled)
         }
     }
 
@@ -83,11 +112,17 @@ class MainActivity : AppCompatActivity() {
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 Log.d("Debug", "明示的に不許可済")
                 // TODO: 本来はここでユーザーに権限が必要な理由を説明する画面を表示する。
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ALLOW_PERMISSION)
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    REQUEST_ALLOW_PERMISSION
+                )
             } else {
                 Log.d("Debug", "まだ許可も不許可もしていない")
                 // 明示的に許可も不許可もされていなければ、ユーザーに許可を求める。
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ALLOW_PERMISSION)
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    REQUEST_ALLOW_PERMISSION
+                )
             }
             // 処理を中断。明示的に許可した後アプリを再起動してもらう。
             return false
@@ -101,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         if (mBluetoothAdapter == null) return false
 
         // 有効でなければ有効にする
-        if (mBluetoothAdapter?.isEnabled == false) {
+        if (mBluetoothAdapter.isEnabled == false) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_BT_ON)
             return false
@@ -110,3 +145,4 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 }
+

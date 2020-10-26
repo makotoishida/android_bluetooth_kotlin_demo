@@ -1,8 +1,6 @@
 package com.example.bluetoothkotlindemo
 
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
+import android.bluetooth.*
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -14,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 class DeviceDetailActivity : AppCompatActivity() {
 
     private lateinit var mBluetoothAdapter: BluetoothAdapter
+    private var mBluetoothLeService: BluetoothLeService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +48,6 @@ class DeviceDetailActivity : AppCompatActivity() {
     fun connect(address: String){
         Log.d("Debug", "connect")
 
-        val device: BluetoothDevice = mBluetoothAdapter.getRemoteDevice(address)
-        Log.d("Debug", "Device: ${device.name}")
-
         // Bluetoothデバイスの種別に応じた接続処理。
         // 参考：
         // https://developer.android.com/guide/topics/connectivity/bluetooth-le?hl=ja
@@ -61,13 +57,22 @@ class DeviceDetailActivity : AppCompatActivity() {
         // https://github.com/bauerjj/Android-Simple-Bluetooth-Example/blob/master/app/src/main/java/com/mcuhq/simplebluetooth/MainActivity.java
         // http://mcuhq.com/27/simple-android-bluetooth-application-with-arduino-example
 
+
+        mBluetoothLeService = BluetoothLeService(null)
+        val isConnected = mBluetoothLeService?.connect(address) ?: false
+        if (isConnected) {
+            mBluetoothLeService?.setCharacteristicNotification(BluetoothGattCharacteristic(UUID_HEART_RATE_MEASUREMENT, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ), true)
+        }
     }
 
     fun disconnect(){
         Log.d("Debug", "disconnect")
+        mBluetoothLeService?.setCharacteristicNotification(BluetoothGattCharacteristic(UUID_HEART_RATE_MEASUREMENT, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ), false)
+        mBluetoothLeService?.disconnect()
     }
 
     fun send(){
         Log.d("Debug", "send")
+//        mBluetoothLeService?.
     }
 }

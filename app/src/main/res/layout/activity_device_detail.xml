@@ -22,7 +22,7 @@
         android:id="@+id/txtDeviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:text="Device Name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -40,32 +40,32 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtDeviceName" />
 
-    <Button
-        android:id="@+id/btnConnect"
+    <TextView
+        android:id="@+id/txtConnectionState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="接続中..."
+        android:textColor="#0000FF"
+        android:textSize="24sp"
+        android:layout_marginTop="24dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnDisconnect"
-        app:layout_constraintTop_toBottomOf="@id/txtDeviceAddress"
-        android:layout_marginTop="24dp"
-        android:text="@string/btn_connect"
-        />
-
-    <Button
-        android:id="@+id/btnDisconnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/btnConnect"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtDeviceAddress"
+        app:layout_constraintTop_toBottomOf="@id/txtDeviceAddress" />
+
+    <ExpandableListView
+        android:id="@+id/gatt_services_list"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="#C4F2F8"
         android:layout_marginTop="24dp"
-        android:text="@string/btn_disconnect"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtConnectionState" />
 
     <TextView
         android:id="@+id/txtReceived"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
         android:background="#FAF7DD"
         android:scrollIndicators="right"
@@ -77,27 +77,7 @@
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnDisconnect" />
-
-    <EditText
-        android:id="@+id/txtSend"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="16sp"
-        android:text="Message to send"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnSend"
-        app:layout_constraintTop_toBottomOf="@id/txtReceived"        />
-
-    <Button
-        android:id="@+id/btnSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/txtSend"
-        app:layout_constraintTop_toBottomOf="@id/txtReceived"
-        android:layout_marginTop="16dp"
-        android:text="@string/btn_send"
+        app:layout_constraintTop_toBottomOf="@id/gatt_services_list"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
